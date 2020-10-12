@@ -1,0 +1,12 @@
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="MissingDefaultResource">
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="100"
+        android:title="Tìm kiếm"
+        app:showAsAction="always"
+        android:icon="@drawable/icon_search"/>
+
+</menu>

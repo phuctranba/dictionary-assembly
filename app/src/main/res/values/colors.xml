@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimaryDark">#003B46</color>
+    <color name="colorPrimaryNight">#117377</color>
+    <color name="colorPrimary">#07575B</color>
+    <color name="colorAccent">#66A5AD</color>
+    <color name="seaFoam">#C4DFE6</color>
+    <color name="white">#fff</color>
+    <color name="shadow">#9F9B9B</color>
+    <color name="white20">#19FFFFFF</color>
+    <color name="backgroundColor">#F1F1F1</color>
+</resources>

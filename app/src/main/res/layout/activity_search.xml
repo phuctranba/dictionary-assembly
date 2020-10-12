@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
+    android:orientation="vertical"
+    tools:context=".SearchActivity.SearchActivity">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/item_options"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@null"
+        android:paddingBottom="5dp"
+        android:paddingRight="3dp"
+        app:queryHint="@string/search_hint"
+        app:searchIcon="@drawable/icon_search" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/buttonAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.2"
+            android:background="@drawable/item_options"
+            android:text="Tất cả"
+            android:textAllCaps="false"
+            android:paddingBottom="5dp"
+            android:paddingRight="3dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/buttonStatement"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.2"
+            android:background="@drawable/item_options"
+            android:text="Lệnh"
+            android:paddingBottom="5dp"
+            android:paddingRight="3dp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/buttonStruct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.2"
+            android:background="@drawable/item_options"
+            android:text="Cấu trúc"
+            android:paddingBottom="5dp"
+            android:paddingRight="3dp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/buttonInterrupt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.2"
+            android:paddingBottom="5dp"
+            android:paddingRight="3dp"
+            android:background="@drawable/item_options"
+            android:text="Ngắt"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/buttonMacro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.2"
+            android:paddingBottom="5dp"
+            android:paddingRight="3dp"
+            android:background="@drawable/item_options"
+            android:text="Macro"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listResultSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
