@@ -7,18 +7,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.dictionaryassembly.Objects.EnumType;
 import com.dictionaryassembly.Objects.History;
 import com.dictionaryassembly.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryActivityAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<History> data;
+    private List<History> data;
 
-    public HistoryActivityAdapter(Context context, ArrayList<History> data) {
+    public HistoryActivityAdapter(Context context, List<History> data) {
         this.context = context;
         this.data = data;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -69,12 +71,12 @@ public class HistoryActivityAdapter extends BaseAdapter {
         return view;
     }
 
-    private String typeFactory(String type){
+    private String typeFactory(EnumType type){
         switch (type){
-            case "STATEMENT": return "Lệnh";
-            case "STRUCT": return "Cấu trúc";
-            case "INTERRUPT": return "Ngắt";
-            case "MACRO": return "Macro";
+            case STATEMENT: return "Lệnh";
+            case STRUCT: return "Cấu trúc";
+            case INTERRUPT: return "Ngắt";
+            case MACRO: return "Macro";
             default: return "Lệnh";
         }
     }

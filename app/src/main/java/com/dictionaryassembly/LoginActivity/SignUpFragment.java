@@ -1,5 +1,7 @@
 package com.dictionaryassembly.LoginActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ public class SignUpFragment extends Fragment {
     EditText editTextLastName, editTextFirstNam, editTextEmail, editTextPass, editTextRePass;
     FirebaseAuth mauth;
     TextView textViewForget;
+    SharedPreferences sharedPreferences;
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -89,7 +92,7 @@ public class SignUpFragment extends Fragment {
         editTextPass = view.findViewById(R.id.editTextPass);
         editTextRePass = view.findViewById(R.id.editTextRePass);
         textViewForget = view.findViewById(R.id.textForget);
-
+        sharedPreferences = getActivity().getSharedPreferences("userinfor", Context.MODE_PRIVATE);
         mauth = FirebaseAuth.getInstance();
     }
 
@@ -155,15 +158,22 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    User user = new User(email, lastName, firstName);
+                    final User user = new User(email, lastName, firstName);
 
                     FirebaseDatabase.getInstance().getReference("users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Log.e("Phuc",task.toString());
                             if (task.isSuccessful()) {
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("email", user.getEmail());
+                                editor.putString("lastname", user.getLastName());
+                                editor.putString("firstname", user.getFirstName());
+
+                                editor.apply();
+
                                 Toast.makeText(getActivity(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                                 ((LoginActivity) getActivity()).GoToMainActitity();
                             } else {

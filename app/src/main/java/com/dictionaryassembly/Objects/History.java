@@ -6,23 +6,29 @@ import androidx.annotation.RequiresApi;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.UUID;
 
 public class History extends AssemblyForm {
 
-    private String type;
     private Date date;
-    private Boolean active;
 
-    public History(int ID, String title, String content, String type,Boolean active) {
-        super(ID, title, content);
-        this.type = type;
+    public History(String ID, String title, String content, EnumType type, Boolean active) {
+        super(ID, title, content, type);
         this.date = new Date();
-        this.active = active;
     }
 
-    public History(int ID, String title, String content, String type) {
-        super(ID, title, content);
-        this.type = type;
+    public History(AssemblyForm assemblyForm) {
+        super(assemblyForm.getID(), assemblyForm.getTitle(), assemblyForm.getContent(), assemblyForm.getType(), assemblyForm.getTypeInterrupt());
+        this.date = new Date();
+    }
+
+    public History(String ID, String title, String content, EnumType type) {
+        super(ID, title, content, type);
+        this.date = new Date();
+    }
+
+    public History(String title, String content, EnumType type) {
+        super(title, content, type);
         this.date = new Date();
     }
 
@@ -40,13 +46,6 @@ public class History extends AssemblyForm {
             return history2.date.compareTo(history1.date);
         }};
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public Date getDate() {
         return date;
@@ -56,11 +55,4 @@ public class History extends AssemblyForm {
         this.date = date;
     }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
 }

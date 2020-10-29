@@ -8,19 +8,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.dictionaryassembly.Objects.EnumType;
 import com.dictionaryassembly.Objects.History;
 import com.dictionaryassembly.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HistoryAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<History> data;
+    private List<History> data;
 
-    public HistoryAdapter(Context context, ArrayList<History> data) {
+    public HistoryAdapter(Context context, List<History> data) {
         this.context = context;
         this.data = data;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -71,12 +73,12 @@ public class HistoryAdapter extends BaseAdapter {
         return view;
     }
 
-    private int iconTypeFactory(String type){
+    private int iconTypeFactory(EnumType type){
         switch (type){
-            case "STATEMENT": return R.drawable.icon_lenh;
-            case "STRUCT": return R.drawable.icon_structure;
-            case "INTERRUPT": return R.drawable.icon_ngat;
-            case "MACRO": return R.drawable.icon_macro;
+            case STATEMENT: return R.drawable.icon_lenh;
+            case STRUCT: return R.drawable.icon_structure;
+            case INTERRUPT: return R.drawable.icon_ngat;
+            case MACRO: return R.drawable.icon_macro;
             default: return R.drawable.icon_lenh;
         }
     }

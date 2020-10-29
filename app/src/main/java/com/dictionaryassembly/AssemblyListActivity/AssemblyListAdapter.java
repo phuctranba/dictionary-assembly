@@ -1,4 +1,4 @@
-package com.dictionaryassembly.StatementActivity;
+package com.dictionaryassembly.AssemblyListActivity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,20 +7,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.dictionaryassembly.HistoryActivity.HistoryActivityAdapter;
-import com.dictionaryassembly.Objects.History;
-import com.dictionaryassembly.Objects.Statement;
+import com.dictionaryassembly.Objects.AssemblyForm;
 import com.dictionaryassembly.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class StatementAdapter extends BaseAdapter {
+public class AssemblyListAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Statement> data;
+    private List<AssemblyForm> data;
 
-    public StatementAdapter(Context context, ArrayList<Statement> data) {
+    public AssemblyListAdapter(Context context, List<AssemblyForm> data) {
         this.context = context;
         this.data = data;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,7 +50,7 @@ public class StatementAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder;
         if(view == null) {
-            view = layoutInflater.inflate(R.layout.item_list_statement, null);
+            view = layoutInflater.inflate(R.layout.item_list_assembly, null);
             viewHolder = new ViewHolder();
             viewHolder.textViewDescription = (TextView) view.findViewById(R.id.textViewDescription);
             viewHolder.textViewTitle = (TextView) view.findViewById(R.id.textViewTitle);
@@ -62,11 +61,29 @@ public class StatementAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        Statement statement = data.get(i);
+        AssemblyForm assemblyForm = data.get(i);
 
-        viewHolder.textViewDescription.setText(statement.getDescription());
-        viewHolder.textViewTitle.setText(statement.getStatement());
-        viewHolder.textViewContent.setText(statement.getContent());
+
+        viewHolder.textViewTitle.setText(assemblyForm.getTitle());
+        switch (assemblyForm.getType()){
+            case STATEMENT: {
+                viewHolder.textViewDescription.setText(assemblyForm.getDescription());
+                viewHolder.textViewContent.setText(assemblyForm.getContent());
+                break;
+            }
+            case STRUCT: {
+                viewHolder.textViewDescription.setText(assemblyForm.getDescription());
+                viewHolder.textViewContent.setVisibility(View.GONE);
+                break;
+            }
+            case INTERRUPT:
+            case MACRO:{
+                viewHolder.textViewDescription.setText(assemblyForm.getContent());
+                viewHolder.textViewContent.setVisibility(View.GONE);
+                break;
+            }
+
+        }
 
         return view;
     }

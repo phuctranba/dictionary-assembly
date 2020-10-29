@@ -1,28 +1,45 @@
 package com.dictionaryassembly.SearchActivity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.dictionaryassembly.Objects.Search;
-import com.dictionaryassembly.Objects.Search;
+import com.dictionaryassembly.AssemblyDetailActivity.AssemblyDetailActivity;
+import com.dictionaryassembly.AssemblyEditActivity.AssemblyEditActivity;
+import com.dictionaryassembly.AssemblyListActivity.AssemblyListActivity;
+import com.dictionaryassembly.Objects.AssemblyForm;
+import com.dictionaryassembly.Objects.DatabaseHelper;
+import com.dictionaryassembly.Objects.EnumType;
+import com.dictionaryassembly.Objects.History;
 import com.dictionaryassembly.R;
-import com.dictionaryassembly.Objects.Statement;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 public class SearchActivity extends AppCompatActivity {
 
     private SearchView searchView;
     private SearchListAdapter searchListAdapter;
-    private ArrayList<Search> searchsListSource, searchsListType ,searchsListSearch;
+    private List<AssemblyForm> searchsListSource, searchsListType ,searchsListSearch;
     private ListView listViewResult;
     private Button buttonAll, buttonStatement, buttonStruct, buttonInterrupt, buttonMacro;
     private String valueSearch="";
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,34 +54,13 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void init() {
-        searchsListSource = new ArrayList<>();
-        searchsListSource.add(new Search(1, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        searchsListSource.add(new Search(2, "Inc", "[Toán hạng đích]", "STRUCT"));
-        searchsListSource.add(new Search(3, "Loop", "<Nhãn đích>", "INTERRUPT"));
-        searchsListSource.add(new Search(4, "LEA", "[Toán hạng đích],[Toán hạng nguồn]","STATEMENT"));
-        searchsListSource.add(new Search(5, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        searchsListSource.add(new Search(6, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        searchsListSource.add(new Search(7, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        searchsListSource.add(new Search(9, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        searchsListSource.add(new Search(10, "Inc", "[Toán hạng đích]", "STRUCT"));
-        searchsListSource.add(new Search(11, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        searchsListSource.add(new Search(12, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        searchsListSource.add(new Search(13, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        searchsListSource.add(new Search(14, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        searchsListSource.add(new Search(15, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        searchsListSource.add(new Search(16, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        searchsListSource.add(new Search(17, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        searchsListSource.add(new Search(18, "Inc", "[Toán hạng đích]",  "STRUCT"));
-        searchsListSource.add(new Search(19, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        searchsListSource.add(new Search(20, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        searchsListSource.add(new Search(21, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        searchsListSource.add(new Search(22, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        searchsListSource.add(new Search(23, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        searchsListSource.add(new Search(24, "Loop", "<Nhãn đích>",  "INTERRUPT"));
 
-        searchsListType = (ArrayList<Search>) searchsListSource.clone();
-        searchsListSearch = (ArrayList<Search>) searchsListSource.clone();
+        databaseHelper = new DatabaseHelper(this);
 
+        searchsListSource = databaseHelper.getAllAssembly();
+
+        searchsListType = new ArrayList<>(searchsListSource);
+        searchsListSearch = new ArrayList<>(searchsListSource);
 
         buttonAll = findViewById(R.id.buttonAll);
         buttonStatement = findViewById(R.id.buttonStatement);
@@ -74,6 +70,19 @@ public class SearchActivity extends AppCompatActivity {
         searchView = findViewById(R.id.search_bar);
         listViewResult = findViewById(R.id.listResultSearch);
         searchListAdapter = new SearchListAdapter(this, searchsListSearch);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void setClick(){
@@ -90,38 +99,64 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        listViewResult.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                saveHistory(searchsListSearch.get(i));
+                Intent intent = new Intent(SearchActivity.this, AssemblyDetailActivity.class);
+                intent.putExtra("ITEM", searchsListSearch.get(i));
+                startActivity(intent);
+            }
+        });
+
         buttonAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setType("ALL");
+                setType(EnumType.ALL);
             }
         });
 
         buttonStatement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setType("STATEMENT");
+                setType(EnumType.STATEMENT);
             }
         });
 
         buttonStruct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setType("STRUCT");
+                setType(EnumType.STRUCT);
             }
         });
 
         buttonInterrupt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setType("INTERRUPT");
+                setType(EnumType.INTERRUPT);
             }
         });
 
         buttonMacro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setType("MACRO");
+                setType(EnumType.MACRO);
+            }
+        });
+    }
+
+    private void saveHistory(AssemblyForm assemblyForm){
+
+        History history = new History(assemblyForm);
+
+        FirebaseDatabase.getInstance().getReference("users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("history")
+                .child(UUID.randomUUID().toString())
+                .setValue(history).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
             }
         });
     }
@@ -129,9 +164,9 @@ public class SearchActivity extends AppCompatActivity {
     protected void searchWithValue(String value) {
         searchsListSearch.clear();
 
-        for (Search search : searchsListType) {
-            if (search.getTitle().toLowerCase().contains(value.toLowerCase())) {
-                searchsListSearch.add(search);
+        for (AssemblyForm assemblyForm : searchsListType) {
+            if (assemblyForm.getTitle().toLowerCase().contains(value.toLowerCase())) {
+                searchsListSearch.add(assemblyForm);
             }
         }
 
@@ -139,15 +174,15 @@ public class SearchActivity extends AppCompatActivity {
         searchListAdapter.notifyDataSetChanged();
     }
 
-    protected void setType(String type) {
+    protected void setType(EnumType type) {
         searchsListType.clear();
 
         switch (type){
-            case "ALL": searchsListType = (ArrayList<Search>) searchsListSource.clone(); break;
+            case ALL: searchsListType = new ArrayList<>(searchsListSource); break;
             default: {
-                for (Search search : searchsListSource) {
-                    if (search.getType().equals(type)) {
-                        searchsListType.add(search);
+                for (AssemblyForm assemblyForm : searchsListSource) {
+                    if (assemblyForm.getType().equals(type)) {
+                        searchsListType.add(assemblyForm);
                     }
                 }
             }

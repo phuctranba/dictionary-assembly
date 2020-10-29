@@ -9,14 +9,15 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
+import com.dictionaryassembly.AssemblyEditActivity.AssemblyEditActivity;
+import com.dictionaryassembly.Objects.EnumType;
 import com.dictionaryassembly.R;
-import com.dictionaryassembly.StatementActivity.StatementActivity;
+import com.dictionaryassembly.AssemblyListActivity.AssemblyListActivity;
 
 public class FragmentOptions extends Fragment {
 
-    private LinearLayout buttonStatement;
+    private LinearLayout buttonStatement, buttonStruct, buttonInterrupt, buttonMacro;
 
     @Override
     public View onCreateView(
@@ -35,7 +36,36 @@ public class FragmentOptions extends Fragment {
         buttonStatement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), StatementActivity.class));
+                Intent intent = new Intent(getActivity(), AssemblyListActivity.class);
+                intent.putExtra("TYPE", EnumType.STATEMENT);
+                startActivity(intent);
+            }
+        });
+
+        buttonStruct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AssemblyListActivity.class);
+                intent.putExtra("TYPE", EnumType.STRUCT);
+                startActivity(intent);
+            }
+        });
+
+        buttonInterrupt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AssemblyListActivity.class);
+                intent.putExtra("TYPE", EnumType.INTERRUPT);
+                startActivity(intent);
+            }
+        });
+
+        buttonMacro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AssemblyListActivity.class);
+                intent.putExtra("TYPE", EnumType.MACRO);
+                startActivity(intent);
             }
         });
 
@@ -43,5 +73,8 @@ public class FragmentOptions extends Fragment {
 
     private void Init(View view){
         buttonStatement = view.findViewById(R.id.buttonStatement);
+        buttonStruct = view.findViewById(R.id.buttonStruct);
+        buttonInterrupt = view.findViewById(R.id.buttonInterrupt);
+        buttonMacro = view.findViewById(R.id.buttonMacro);
     }
 }

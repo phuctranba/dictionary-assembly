@@ -2,28 +2,37 @@ package com.dictionaryassembly.HistoryActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.dictionaryassembly.AssemblyDetailActivity.AssemblyDetailActivity;
 import com.dictionaryassembly.MainActivity.HistoryAdapter;
+import com.dictionaryassembly.Objects.AssemblyForm;
+import com.dictionaryassembly.Objects.DatabaseHelper;
+import com.dictionaryassembly.Objects.EnumType;
 import com.dictionaryassembly.Objects.History;
 import com.dictionaryassembly.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
 
     private HistoryActivityAdapter historyAdapter;
-    private ArrayList<History> historyArrayList;
+    private List<History> historyArrayList;
     private ListView listViewHistory;
     private LinearLayout buttonSortDate, buttonSortTitle;
     private ImageView imageViewSortDate, imageViewSortTitle;
     private Boolean sortDate, sortTitle;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,35 +67,27 @@ public class HistoryActivity extends AppCompatActivity {
                 historyAdapter.notifyDataSetChanged();
             }
         });
+
+        listViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AssemblyForm assemblyForm = databaseHelper.getByIDTypeAssembly(historyArrayList.get(i).getType(),historyArrayList.get(i).getID());
+                if(assemblyForm!=null){
+                    Intent intent = new Intent(HistoryActivity.this, AssemblyDetailActivity.class);
+                    intent.putExtra("ITEM", assemblyForm);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(HistoryActivity.this, "Nội dung không còn tồn tại!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void Init(){
         historyArrayList = new ArrayList<>();
+        databaseHelper = new DatabaseHelper(this);
 
-        historyArrayList.add(new History(1, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(2, "Inc", "[Toán hạng đích]", "STRUCT"));
-        historyArrayList.add(new History(3, "Loop", "<Nhãn đích>", "INTERRUPT"));
-        historyArrayList.add(new History(4, "LEA", "[Toán hạng đích],[Toán hạng nguồn]","STATEMENT"));
-        historyArrayList.add(new History(5, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(6, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(7, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(9, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(10, "Inc", "[Toán hạng đích]", "STRUCT"));
-        historyArrayList.add(new History(11, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        historyArrayList.add(new History(12, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(13, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(14, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(15, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(16, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        historyArrayList.add(new History(17, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(18, "Inc", "[Toán hạng đích]",  "STRUCT"));
-        historyArrayList.add(new History(19, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        historyArrayList.add(new History(20, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(21, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(22, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(23, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(24, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-
+        historyArrayList = databaseHelper.getAllHistory();
 
         sortDate=true;
         sortTitle=true;

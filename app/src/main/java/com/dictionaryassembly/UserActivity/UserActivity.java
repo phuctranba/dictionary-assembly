@@ -1,33 +1,28 @@
 package com.dictionaryassembly.UserActivity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dictionaryassembly.LoginActivity.LoginActivity;
-import com.dictionaryassembly.Objects.User;
+import com.dictionaryassembly.Objects.DatabaseHelper;
 import com.dictionaryassembly.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class UserActivity extends AppCompatActivity {
 
     FirebaseAuth mauth;
     private TextView textViewName, textViewEmail;
+    SharedPreferences sharedPreferences;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,34 +31,27 @@ public class UserActivity extends AppCompatActivity {
 
         Init();
 
-        loadUser();
+        getUser();
 
     }
 
     private void Init() {
         mauth = FirebaseAuth.getInstance();
+        databaseHelper = new DatabaseHelper(this);
 
+        sharedPreferences = this.getSharedPreferences("userinfor", Context.MODE_PRIVATE);
         textViewName = findViewById(R.id.textName);
         textViewEmail = findViewById(R.id.textEmail);
     }
 
-    private void loadUser() {
-        FirebaseDatabase.getInstance().getReference("users")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        User user = snapshot.getValue(User.class);
+    private void getUser() {
 
-                        textViewName.setText(user.getLastName() + " " + user.getFirstName());
-                        textViewEmail.setText(user.getEmail());
-                    }
+        String email = sharedPreferences.getString("email", "Trống");
+        String lastname = sharedPreferences.getString("lastname", "Trống");
+        String firstname = sharedPreferences.getString("firstname", "");
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        System.out.println("The read failed: " + error.getCode());
-                    }
-                });
+        textViewName.setText(lastname + " " + firstname);
+        textViewEmail.setText(email);
     }
 
     @Override
@@ -89,6 +77,8 @@ public class UserActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             mauth.signOut();
+                            databaseHelper.deleteAllHistory();
+                            databaseHelper.deleteMacroAssembly();
                             startActivity(new Intent(UserActivity.this, LoginActivity.class));
                         }
                     })

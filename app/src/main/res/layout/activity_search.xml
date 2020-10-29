@@ -8,10 +8,20 @@
     android:orientation="vertical"
     tools:context=".SearchActivity.SearchActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:titleTextColor="@color/white"
+        app:popupTheme="@style/MyTheme"
+        android:background="@color/colorPrimary"
+        android:theme="@style/MyTheme"
+        tools:ignore="MissingConstraints" />
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_margin="20dp"
         android:background="@drawable/item_options"
         app:iconifiedByDefault="false"

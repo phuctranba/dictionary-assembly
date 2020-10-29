@@ -1,32 +1,50 @@
 package com.dictionaryassembly.MainActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.dictionaryassembly.AssemblyDetailActivity.AssemblyDetailActivity;
+import com.dictionaryassembly.AssemblyEditActivity.AssemblyEditActivity;
+import com.dictionaryassembly.AssemblyListActivity.AssemblyListActivity;
 import com.dictionaryassembly.HistoryActivity.HistoryActivity;
+import com.dictionaryassembly.LoginActivity.LoginActivity;
 import com.dictionaryassembly.LoginActivity.SignInFragment;
+import com.dictionaryassembly.Objects.AssemblyForm;
+import com.dictionaryassembly.Objects.DatabaseHelper;
+import com.dictionaryassembly.Objects.EnumType;
 import com.dictionaryassembly.Objects.History;
 import com.dictionaryassembly.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentHistory extends Fragment {
 
     private HistoryAdapter historyAdapter;
-    private ArrayList<History> historyArrayList;
     private ListView listViewHistory;
     private ImageView expandImage;
+    List<History> historyList;
+    DatabaseHelper databaseHelper;
 
     public FragmentHistory() {
         // Required empty public constructor
@@ -55,69 +73,88 @@ public class FragmentHistory extends Fragment {
         Log.e("phuc", "Init: 1");
         Init(view);
 
-        listViewHistory.setAdapter(historyAdapter);
-
         expandImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), HistoryActivity.class));
             }
         });
+
+
+        listViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AssemblyForm assemblyForm = databaseHelper.getByIDTypeAssembly(historyList.get(i).getType(),historyList.get(i).getID());
+                if(assemblyForm!=null){
+                    Intent intent = new Intent(getActivity(), AssemblyDetailActivity.class);
+                    intent.putExtra("ITEM", assemblyForm);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(getActivity(), "Nội dung không còn tồn tại!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void Init(View view) {
-        historyArrayList = new ArrayList<>();
-//        historyArrayList.add(new History(1, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "Lấy nội dung (giá trị) của [Toán hạng nguồn] đặt vào [Toán hạng đích]. Nội dung của [Toán hạng nguồn] không bị thay đổi.", "STATEMENT"));
-//        historyArrayList.add(new History(2, "Inc", "[Toán hạng đích]", "Lệnh Inc (Increment): làm tăng giá trị của [Toán hạng đích] lên 1 đơn vị.", "STRUCT"));
-//        historyArrayList.add(new History(3, "Loop", "<Nhãn đích>", "Khi gặp lệnh này chương trình sẽ lặp lại việc thực hiện các lệnh sau <Nhãn lệnh> đủ n lần, với n được đặt trước trong thanh ghi CX. Sau mỗi lần lặp CX tự động giảm 1 đơn vị (Cx = Cx – 1) và lệnh lặp sẽ dừng khi Cx = 0.", "INTERRUPT"));
-//        historyArrayList.add(new History(4, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "[Toán hạng đích]: Là các thanh ghi 16 bít. [Toán hạng nguồn]: Là địa chỉ của một vùng nhớ hay tên của một biến.", "STATEMENT"));
-//        historyArrayList.add(new History(5, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "Lệnh Cmp (Compare) được sử dụng để so sánh giá trị/nội dung của [Toán hạng đích] so với [Toán hạng nguồn]. Tương tự như lệnh Sub, nó lấy [Toán hạng đích] trừ đi [Toán hạng nguồn] nhưng kết quả không làm thay đổi [Toán hạng đích] mà chỉ làm thay đổi giá trị của một số cờ hiệu: CF, ZF, OF,…", "MACRO"));
-//        historyArrayList.add(new History(6, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "Lệnh Cmp (Compare) được sử dụng để so sánh giá trị/nội dung của [Toán hạng đích] so với [Toán hạng nguồn]. Tương tự như lệnh Sub, nó lấy [Toán hạng đích] trừ đi [Toán hạng nguồn] nhưng kết quả không làm thay đổi [Toán hạng đích] mà chỉ làm thay đổi giá trị của một số cờ hiệu: CF, ZF, OF,…", "MACRO"));
-//        historyArrayList.add(new History(7, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "[Toán hạng đích]: Là các thanh ghi 16 bít. [Toán hạng nguồn]: Là địa chỉ của một vùng nhớ hay tên của một biến.", "STATEMENT"));
-//        historyArrayList.add(new History(9, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "Lấy nội dung (giá trị) của [Toán hạng nguồn] đặt vào [Toán hạng đích]. Nội dung của [Toán hạng nguồn] không bị thay đổi.", "STATEMENT"));
-//        historyArrayList.add(new History(10, "Inc", "[Toán hạng đích]", "Lệnh Inc (Increment): làm tăng giá trị của [Toán hạng đích] lên 1 đơn vị.", "STRUCT"));
-//        historyArrayList.add(new History(11, "Loop", "<Nhãn đích>", "Khi gặp lệnh này chương trình sẽ lặp lại việc thực hiện các lệnh sau <Nhãn lệnh> đủ n lần, với n được đặt trước trong thanh ghi CX. Sau mỗi lần lặp CX tự động giảm 1 đơn vị (Cx = Cx – 1) và lệnh lặp sẽ dừng khi Cx = 0.", "INTERRUPT"));
-//        historyArrayList.add(new History(12, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "[Toán hạng đích]: Là các thanh ghi 16 bít. [Toán hạng nguồn]: Là địa chỉ của một vùng nhớ hay tên của một biến.", "STATEMENT"));
-//        historyArrayList.add(new History(13, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "Lệnh Cmp (Compare) được sử dụng để so sánh giá trị/nội dung của [Toán hạng đích] so với [Toán hạng nguồn]. Tương tự như lệnh Sub, nó lấy [Toán hạng đích] trừ đi [Toán hạng nguồn] nhưng kết quả không làm thay đổi [Toán hạng đích] mà chỉ làm thay đổi giá trị của một số cờ hiệu: CF, ZF, OF,…", "MACRO"));
-//        historyArrayList.add(new History(14, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "Lệnh Cmp (Compare) được sử dụng để so sánh giá trị/nội dung của [Toán hạng đích] so với [Toán hạng nguồn]. Tương tự như lệnh Sub, nó lấy [Toán hạng đích] trừ đi [Toán hạng nguồn] nhưng kết quả không làm thay đổi [Toán hạng đích] mà chỉ làm thay đổi giá trị của một số cờ hiệu: CF, ZF, OF,…", "MACRO"));
-//        historyArrayList.add(new History(15, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "[Toán hạng đích]: Là các thanh ghi 16 bít. [Toán hạng nguồn]: Là địa chỉ của một vùng nhớ hay tên của một biến.", "STATEMENT"));
-//        historyArrayList.add(new History(16, "Loop", "<Nhãn đích>", "Khi gặp lệnh này chương trình sẽ lặp lại việc thực hiện các lệnh sau <Nhãn lệnh> đủ n lần, với n được đặt trước trong thanh ghi CX. Sau mỗi lần lặp CX tự động giảm 1 đơn vị (Cx = Cx – 1) và lệnh lặp sẽ dừng khi Cx = 0.", "INTERRUPT"));
-//        historyArrayList.add(new History(17, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "Lấy nội dung (giá trị) của [Toán hạng nguồn] đặt vào [Toán hạng đích]. Nội dung của [Toán hạng nguồn] không bị thay đổi.", "STATEMENT"));
-//        historyArrayList.add(new History(18, "Inc", "[Toán hạng đích]", "Lệnh Inc (Increment): làm tăng giá trị của [Toán hạng đích] lên 1 đơn vị.", "STRUCT"));
-//        historyArrayList.add(new History(19, "Loop", "<Nhãn đích>", "Khi gặp lệnh này chương trình sẽ lặp lại việc thực hiện các lệnh sau <Nhãn lệnh> đủ n lần, với n được đặt trước trong thanh ghi CX. Sau mỗi lần lặp CX tự động giảm 1 đơn vị (Cx = Cx – 1) và lệnh lặp sẽ dừng khi Cx = 0.", "INTERRUPT"));
-//        historyArrayList.add(new History(20, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "[Toán hạng đích]: Là các thanh ghi 16 bít. [Toán hạng nguồn]: Là địa chỉ của một vùng nhớ hay tên của một biến.", "STATEMENT"));
-//        historyArrayList.add(new History(21, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "Lệnh Cmp (Compare) được sử dụng để so sánh giá trị/nội dung của [Toán hạng đích] so với [Toán hạng nguồn]. Tương tự như lệnh Sub, nó lấy [Toán hạng đích] trừ đi [Toán hạng nguồn] nhưng kết quả không làm thay đổi [Toán hạng đích] mà chỉ làm thay đổi giá trị của một số cờ hiệu: CF, ZF, OF,…", "MACRO"));
-//        historyArrayList.add(new History(22, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "Lệnh Cmp (Compare) được sử dụng để so sánh giá trị/nội dung của [Toán hạng đích] so với [Toán hạng nguồn]. Tương tự như lệnh Sub, nó lấy [Toán hạng đích] trừ đi [Toán hạng nguồn] nhưng kết quả không làm thay đổi [Toán hạng đích] mà chỉ làm thay đổi giá trị của một số cờ hiệu: CF, ZF, OF,…", "MACRO"));
-//        historyArrayList.add(new History(23, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "[Toán hạng đích]: Là các thanh ghi 16 bít. [Toán hạng nguồn]: Là địa chỉ của một vùng nhớ hay tên của một biến.", "STATEMENT"));
-//        historyArrayList.add(new History(24, "Loop", "<Nhãn đích>", "Khi gặp lệnh này chương trình sẽ lặp lại việc thực hiện các lệnh sau <Nhãn lệnh> đủ n lần, với n được đặt trước trong thanh ghi CX. Sau mỗi lần lặp CX tự động giảm 1 đơn vị (Cx = Cx – 1) và lệnh lặp sẽ dừng khi Cx = 0.", "INTERRUPT"));
-
-        historyArrayList.add(new History(1, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(2, "Inc", "[Toán hạng đích]", "STRUCT"));
-        historyArrayList.add(new History(3, "Loop", "<Nhãn đích>", "INTERRUPT"));
-        historyArrayList.add(new History(4, "LEA", "[Toán hạng đích],[Toán hạng nguồn]","STATEMENT"));
-        historyArrayList.add(new History(5, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(6, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(7, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(9, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(10, "Inc", "[Toán hạng đích]", "STRUCT"));
-        historyArrayList.add(new History(11, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        historyArrayList.add(new History(12, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(13, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(14, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(15, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(16, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        historyArrayList.add(new History(17, "Mov", " [Toán hạng đích], [Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(18, "Inc", "[Toán hạng đích]",  "STRUCT"));
-        historyArrayList.add(new History(19, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-        historyArrayList.add(new History(20, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(21, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(22, "Cmp", "[Toán hạng đích], [Toán hạng nguồn]", "MACRO"));
-        historyArrayList.add(new History(23, "LEA", "[Toán hạng đích],[Toán hạng nguồn]", "STATEMENT"));
-        historyArrayList.add(new History(24, "Loop", "<Nhãn đích>",  "INTERRUPT"));
-
         listViewHistory = view.findViewById(R.id.listviewHistory);
         expandImage = view.findViewById(R.id.imageExpand);
-        historyAdapter = new HistoryAdapter(getActivity(), historyArrayList);
+
+        databaseHelper = new DatabaseHelper(getActivity());
+        historyList = new ArrayList<>();
+
+        loadHistory();
+
+        listViewHistory.setAdapter(historyAdapter);
+    }
+
+    private void loadHistory(){
+
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting()) {
+            historyAdapter = new HistoryAdapter(getActivity(),historyList);
+
+            FirebaseDatabase.getInstance().getReference("users")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child("history")
+                    .addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                            History history = snapshot.getValue(History.class);
+                            if (historyList.size() < 50) historyList.add(history);
+                            databaseHelper.addHistory(history);
+                            historyAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                            History history = snapshot.getValue(History.class);
+                            historyList.remove(history);
+                            databaseHelper.deleteHistory(history);
+                            historyAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+        }else {
+            historyList = new ArrayList<>(databaseHelper.getAllHistory());
+            historyAdapter = new HistoryAdapter(getActivity(),historyList);
+        }
     }
 
 

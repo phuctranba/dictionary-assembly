@@ -8,5 +8,11 @@
         android:title="Tìm kiếm"
         app:showAsAction="always"
         android:icon="@drawable/icon_search"/>
+    <item
+        android:id="@+id/action_add"
+        android:orderInCategory="100"
+        android:title="Tìm kiếm"
+        app:showAsAction="always"
+        android:icon="@drawable/icon_add"/>
 
 </menu>

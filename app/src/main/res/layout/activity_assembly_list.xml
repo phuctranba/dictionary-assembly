@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/backgroundColor"
-    tools:context=".StatementActivity.StatementActivity">
+    tools:context=".AssemblyListActivity.AssemblyListActivity">
 
     <ListView
         android:scrollbars="none"
-        android:id="@+id/listStatement"
+        android:id="@+id/listAssembly"
         android:dividerHeight="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

@@ -9,9 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StatementActivity.StatementActivity"
+        <activity android:name=".AssemblyEditActivity.AssemblyEditActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".AssemblyDetailActivity.AssemblyDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AssemblyListActivity.AssemblyListActivity"
             android:label="Lệnh"
-            android:parentActivityName=".MainActivity.MainActivity"/>
+            android:parentActivityName=".MainActivity.MainActivity" />
         <activity
             android:name=".HistoryActivity.HistoryActivity"
             android:label="Lịch sử"
@@ -33,7 +39,7 @@
         <activity
             android:name=".SearchActivity.SearchActivity"
             android:label="Tìm kiếm"
-            android:parentActivityName=".MainActivity.MainActivity" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LoginActivity.LoginActivity"
             android:theme="@style/LoginTheme" />

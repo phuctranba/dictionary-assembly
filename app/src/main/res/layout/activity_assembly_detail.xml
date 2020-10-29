@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AssemblyDetailActivity.AssemblyDetailActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:theme="@style/MyTheme"
+        android:layout_height="wrap_content"
+        app:popupTheme="@style/MyTheme"
+        android:layout_width="match_parent"
+        app:titleTextColor="@color/white"
+        android:background="@color/colorPrimary"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_height="wrap_content"
+        android:text="Xinf chaof"
+        android:layout_marginVertical="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(Xinf chaof đằng ấy nah)"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"/>
+
+    <LinearLayout
+        android:id="@+id/interrupt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:weightSum="10"
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="20dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/icon_star" />
+
+        <TextView
+            android:id="@+id/cuphap"
+            android:layout_width="0dp"
+            android:layout_weight="9.5"
+            android:layout_height="wrap_content"
+            android:text="Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:weightSum="10"
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="20dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/icon_star" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_weight="9.5"
+            android:layout_height="wrap_content"
+            android:text="Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah Xinf chaof đằng ấy nah"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:id="@+id/image">
+        <TextView
+            android:id="@+id/textSample"
+            android:layout_marginVertical="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minh họa"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="15sp"/>
+
+        <ImageView
+            android:id="@+id/imageSample"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/icon_ngat" />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

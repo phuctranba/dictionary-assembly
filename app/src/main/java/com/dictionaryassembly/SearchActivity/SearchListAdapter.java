@@ -7,18 +7,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.dictionaryassembly.Objects.Search;
+import com.dictionaryassembly.Objects.AssemblyForm;
+import com.dictionaryassembly.Objects.EnumType;
 import com.dictionaryassembly.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SearchListAdapter extends BaseAdapter {
 
     private Context context;
     private LayoutInflater layoutInflater;
-    private ArrayList<Search> data;
+    private List<AssemblyForm> data;
 
-    public SearchListAdapter(Context context, ArrayList<Search> data) {
+    public SearchListAdapter(Context context, List<AssemblyForm> data) {
         this.context = context;
         this.data = data;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -60,21 +62,21 @@ public class SearchListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        Search search = data.get(i);
+        AssemblyForm AssemblyForm = data.get(i);
 
-        viewHolder.textViewType.setText(typeFactory(search.getType()));
-        viewHolder.textViewTitle.setText(search.getTitle());
-        viewHolder.textViewContent.setText(search.getContent());
+        viewHolder.textViewType.setText(typeFactory(AssemblyForm.getType()));
+        viewHolder.textViewTitle.setText(AssemblyForm.getTitle());
+        viewHolder.textViewContent.setText(AssemblyForm.getContent());
 
         return view;
     }
 
-    private String typeFactory(String type){
+    private String typeFactory(EnumType type){
         switch (type){
-            case "STATEMENT": return "Lệnh";
-            case "STRUCT": return "Cấu trúc";
-            case "INTERRUPT": return "Ngắt";
-            case "MACRO": return "Macro";
+            case STATEMENT: return "Lệnh";
+            case STRUCT: return "Cấu trúc";
+            case INTERRUPT: return "Ngắt";
+            case MACRO: return "Macro";
             default: return "Lệnh";
         }
     }

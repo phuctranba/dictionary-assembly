@@ -1,5 +1,7 @@
 package com.dictionaryassembly.LoginActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,7 +24,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignInFragment extends Fragment {
 
@@ -30,7 +35,7 @@ public class SignInFragment extends Fragment {
     EditText editTextEmail, editTextPass;
     FirebaseAuth mauth;
     TextView textViewForget;
-
+    SharedPreferences sharedPreferences;
     public SignInFragment() {
         // Required empty public constructor
     }
@@ -86,6 +91,7 @@ public class SignInFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPass = view.findViewById(R.id.editTextPass);
         textViewForget = view.findViewById(R.id.textForget);
+        sharedPreferences = getActivity().getSharedPreferences("userinfor", Context.MODE_PRIVATE);
 
         mauth = FirebaseAuth.getInstance();
     }
@@ -125,6 +131,28 @@ public class SignInFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+
+                    FirebaseDatabase.getInstance().getReference("users")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    User user = snapshot.getValue(User.class);
+
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("email", user.getEmail());
+                                    editor.putString("lastname", user.getLastName());
+                                    editor.putString("firstname", user.getFirstName());
+
+                                    editor.apply();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    System.out.println("The read failed: " + error.getCode());
+                                }
+                            });
+
                     ((LoginActivity) getActivity()).GoToMainActitity();
                 }else {
                     Toast.makeText(getActivity(), "Email hoặc mật khẩu không chính xác!!", Toast.LENGTH_SHORT).show();

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroundColor"
+    android:weightSum="10"
+    tools:context=".AssemblyEditActivity.AssemblyEditActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/MyTheme"
+        app:popupTheme="@style/MyTheme"
+        app:titleTextColor="@color/white"
+        tools:ignore="MissingConstraints" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:layout_height="0dp"
+        android:layout_weight="8.8">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/shapebgsearch"
+                android:hint="Tên"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:lines="1"
+                android:padding="15dp" />
+
+
+            <LinearLayout
+                android:id="@+id/inputInterrupt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginHorizontal="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:weightSum="10"
+                    android:layout_marginVertical="10dp"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/ngatInterrupt"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/shapebgsearch"
+                        android:hint="Tên ngắt"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:lines="1"
+                        android:padding="15dp" />
+                    <EditText
+                        android:id="@+id/hamInterrupt"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shapebgsearch"
+                        android:hint="Tên hàm"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:lines="1"
+                        android:padding="15dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:weightSum="10"
+                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/typeInterrupt"
+                        android:layout_width="0dp"
+                        android:layout_weight="8.5"
+                        android:layout_marginRight="20dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:textColor="@color/colorPrimaryNight"
+                        android:background="@drawable/shapebgsearch"
+                        android:hint="Phần tử liên quan"
+                        android:gravity="top|left"
+                        android:inputType="textMultiLine"
+                        android:padding="15dp" />
+
+                    <RadioGroup
+                        android:layout_weight="1.5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:id="@+id/BIOS"
+                            android:checked="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="BIOS"/>
+                        <RadioButton
+                            android:id="@+id/DOS"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="DOS"/>
+                    </RadioGroup>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:minLines="3"
+                android:textColor="@color/colorPrimaryNight"
+                android:background="@drawable/shapebgsearch"
+                android:hint="Nội dung"
+                android:gravity="top|left"
+                android:inputType="textMultiLine"
+                android:padding="15dp" />
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/shapebgsearch"
+                android:gravity="top|left"
+                android:hint="Mô tả"
+                android:inputType="textMultiLine"
+                android:textSize="17sp"
+                android:minLines="5"
+                android:padding="15dp" />
+
+            <CheckBox
+                android:id="@+id/active"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hoạt động"
+                android:textColor="@color/colorPrimary"
+                android:buttonTint="@color/colorPrimary"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"/>
+
+            <Button
+                android:id="@+id/pickImage"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:background="@drawable/item_options"
+                android:paddingRight="3dp"
+                android:paddingBottom="5dp"
+                android:text="Chọn ảnh"
+                android:textColor="@color/colorPrimary"
+                android:textSize="13sp"/>
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/no_image" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:weightSum="10"
+        android:gravity="center_vertical"
+        android:layout_weight="1.2">
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_weight="5"
+            android:layout_marginLeft="40dp"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:background="@drawable/item_options"
+            android:paddingRight="3dp"
+            android:paddingBottom="5dp"
+            android:text="Hủy"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_weight="5"
+            android:layout_marginHorizontal="40dp"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:background="@drawable/background_button_login_signup"
+            android:paddingRight="3dp"
+            android:paddingBottom="5dp"
+            android:text="Lưu"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

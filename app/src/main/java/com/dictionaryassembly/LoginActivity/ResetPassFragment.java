@@ -109,6 +109,7 @@ public class ResetPassFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Kiểm tra email để đặt lại mật khẩu!", Toast.LENGTH_SHORT).show();
+                            ((LoginActivity) getActivity()).GoToSignIn();
                         }else {
                             Toast.makeText(getActivity(), "Xảy ra lỗi, xin thử lại!", Toast.LENGTH_SHORT).show();
                         }
