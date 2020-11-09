@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.dictionaryassembly.MainActivity.MainActivity">
     <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="100"
+        android:title="Chỉnh sửa"
+        app:showAsAction="always"
+        android:icon="@drawable/icon_edit"/>
+
+    <item
         android:id="@+id/action_signout"
         android:orderInCategory="100"
         android:title="@string/menu_signout"

@@ -40,4 +40,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.0.1'
 }

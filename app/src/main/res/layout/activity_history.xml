@@ -44,6 +44,7 @@
             <ImageView
                 android:id="@+id/imageViewSortDate"
                 android:layout_width="33dp"
+                android:src="@drawable/icon_arrow_down"
                 android:layout_height="33dp"/>
 
         </LinearLayout>
@@ -70,7 +71,7 @@
                 android:id="@+id/imageViewSortTitle"
                 android:layout_width="33dp"
                 android:layout_height="33dp"
-                android:src="@drawable/icon_arrow_down" />
+                 />
 
 
         </LinearLayout>
@@ -83,5 +84,13 @@
         android:dividerHeight="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/emptyElement"
+        android:layout_marginTop="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:src="@drawable/icon_empty" />
 
 </LinearLayout>

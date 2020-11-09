@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
                 cm.getActiveNetworkInfo().isConnectedOrConnecting()) {
 
             databaseHelper.deleteAllAssembly();
-            databaseHelper.deleteAllHistory();
 
             FirebaseDatabase.getInstance().getReference("dictionary")
                     .addChildEventListener(new ChildEventListener() {
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-            FirebaseDatabase.getInstance().getReference("users")
+            FirebaseDatabase.getInstance().getReference("usersDictionary")
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .child("macro")
                     .addChildEventListener(new ChildEventListener() {

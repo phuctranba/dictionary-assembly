@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,6 +13,8 @@ import com.dictionaryassembly.MainActivity.MainActivity;
 import com.dictionaryassembly.R;
 
 public class LoginActivity extends AppCompatActivity {
+
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +24,8 @@ public class LoginActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.framelayout, new SignInFragment()).commit();
+
+        progressDialog = new ProgressDialog(this);
     }
 
     @SuppressLint("CommitTransaction")
@@ -48,5 +53,14 @@ public class LoginActivity extends AppCompatActivity {
     void GoToMainActitity() {
         Intent searchActivity = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(searchActivity);
+    }
+
+    void showLoad(String mess){
+        progressDialog.setTitle(mess);
+        progressDialog.show();
+    }
+
+    void hideLoad(){
+        progressDialog.dismiss();
     }
 }

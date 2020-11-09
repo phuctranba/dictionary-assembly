@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,6 +40,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -111,9 +114,28 @@ public class AssemblyEditActivity extends AppCompatActivity {
             setTitle("Chỉnh sửa");
             assemblyForm = (AssemblyForm) getIntent().getSerializableExtra("ITEM");
             typeAssembly = assemblyForm.getType();
-            editTextTitle.setText(assemblyForm.getTitle());
-            editTextContent.setText(assemblyForm.getContent());
+
             editTextDescription.setText(assemblyForm.getDescription());
+            checkBoxActive.setChecked(assemblyForm.isActive());
+            editTextContent.setText(assemblyForm.getContent());
+
+            if(typeAssembly.equals(EnumType.INTERRUPT)){
+                String[] title = assemblyForm.getTitle().split("-");
+                editTextNgatInterrupt.setText(title[0].trim());
+                editTextHamInterrupt.setText(title[1].trim());
+
+                String[] content = assemblyForm.getTypeInterrupt().split("-");
+                if(!content[0].trim().equals("Ngắt BIOS"))  {
+                    radioButtonDOS.setChecked(true);
+                    radioButtonBIOS.setChecked(false);
+                }
+                editTextTypeInterrupt.setText(content[1].trim());
+            }else {
+                editTextTitle.setText(assemblyForm.getTitle());
+            }
+
+            if(assemblyForm.getImageLink()!=null)
+                if(!assemblyForm.getImageLink().isEmpty())Picasso.get().load(assemblyForm.getImageLink()).into(imageView);
         }
     }
 
@@ -128,7 +150,15 @@ public class AssemblyEditActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadImage();
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                if (cm.getActiveNetworkInfo() != null &&
+                        cm.getActiveNetworkInfo().isConnectedOrConnecting()){
+                    uploadImage();
+                }else {
+                    Toast.makeText(AssemblyEditActivity.this, "Không có kết nối internet, thử lại sau!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -205,8 +235,13 @@ public class AssemblyEditActivity extends AppCompatActivity {
         assemblyForm.setActive(checkBoxActive.isChecked());
         if (updateImage) assemblyForm.setImageLink(urlImage);
 
+        if(assemblyForm.getTitle().isEmpty()||assemblyForm.getDescription().isEmpty()){
+            Toast.makeText(AssemblyEditActivity.this, "Vui lòng nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (typeAssembly.equals(EnumType.MACRO)) {
-            FirebaseDatabase.getInstance().getReference("users")
+            FirebaseDatabase.getInstance().getReference("usersDictionary")
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .child("macro")
                     .child(assemblyForm.getID())

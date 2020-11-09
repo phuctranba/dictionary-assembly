@@ -3,7 +3,9 @@ package com.dictionaryassembly.AssemblyListActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -34,7 +36,9 @@ public class AssemblyListActivity extends AppCompatActivity {
     private ListView listViewAssemblyForm;
     EnumType enumType;
     DatabaseHelper databaseHelper;
-
+    SharedPreferences sharedPreferences;
+    MenuItem itemAdd;
+    int permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +51,21 @@ public class AssemblyListActivity extends AppCompatActivity {
     }
 
     private void Init() {
-        enumType =(EnumType) getIntent().getSerializableExtra("TYPE");
+        sharedPreferences = this.getSharedPreferences("userinfor", Context.MODE_PRIVATE);
+        enumType = (EnumType) getIntent().getSerializableExtra("TYPE");
         databaseHelper = new DatabaseHelper(this);
         assemblyFormArrayList = databaseHelper.getByTypeAssembly(enumType);
 
+
         setTitle(converttype(enumType));
         listViewAssemblyForm = findViewById(R.id.listAssembly);
+        listViewAssemblyForm.setEmptyView(findViewById(R.id.emptyElement));
         assemblyListAdapter = new AssemblyListAdapter(this, assemblyFormArrayList);
+
+        permission = sharedPreferences.getInt("permission", 1);
     }
 
-    private void setClick(){
+    private void setClick() {
         listViewAssemblyForm.setAdapter(assemblyListAdapter);
 
         listViewAssemblyForm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -71,11 +80,27 @@ public class AssemblyListActivity extends AppCompatActivity {
         listViewAssemblyForm.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(AssemblyListActivity.this, AssemblyEditActivity.class);
-                intent.putExtra("TYPEACTION", "EDIT");
-                intent.putExtra("ITEM", assemblyFormArrayList.get(i));
-                startActivityForResult(intent,1);
-                return true;
+
+                if (!enumType.equals(EnumType.MACRO)) {
+
+                    if (permission == 0) {
+                        Intent intent = new Intent(AssemblyListActivity.this, AssemblyEditActivity.class);
+                        intent.putExtra("TYPEACTION", "EDIT");
+                        intent.putExtra("ITEM", assemblyFormArrayList.get(i));
+                        startActivityForResult(intent, 1);
+                        return true;
+                    } else return false;
+
+                } else {
+
+                    Intent intent = new Intent(AssemblyListActivity.this, AssemblyEditActivity.class);
+                    intent.putExtra("TYPEACTION", "EDIT");
+                    intent.putExtra("ITEM", assemblyFormArrayList.get(i));
+                    startActivityForResult(intent, 1);
+                    return true;
+
+                }
+
             }
         });
     }
@@ -84,6 +109,10 @@ public class AssemblyListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_open_search, menu);
+
+        itemAdd = menu.findItem(R.id.action_add);
+        if (!enumType.equals(EnumType.MACRO)) itemAdd.setVisible(permission == 0);
+
         return true;
     }
 
@@ -100,7 +129,7 @@ public class AssemblyListActivity extends AppCompatActivity {
                 Intent intent = new Intent(AssemblyListActivity.this, AssemblyEditActivity.class);
                 intent.putExtra("TYPEACTION", "CREATE");
                 intent.putExtra("TYPE", getIntent().getSerializableExtra("TYPE"));
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
                 return true;
         }
 

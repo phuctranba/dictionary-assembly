@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ASSEMBLY_TYPEINTERRUPT = "Assembly_TypeInterrupt";
 
     private static final String COLUMN_HISTORY_ID ="History_Id";
+    private static final String COLUMN_HISTORY_ASSEMBLY_ID ="History_Assembly_Id";
     private static final String COLUMN_HISTORY_TITLE ="History_Title";
     private static final String COLUMN_HISTORY_CONTENT = "History_Content";
     private static final String COLUMN_HISTORY_TYPE = "History_Type";
@@ -58,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String scriptHistory = "CREATE TABLE " + TABLE_HISTORY + "("
                 + COLUMN_HISTORY_ID + " TEXT PRIMARY KEY,"
+                + COLUMN_HISTORY_ASSEMBLY_ID + " TEXT,"
                 + COLUMN_HISTORY_TITLE + " TEXT,"
                 + COLUMN_HISTORY_CONTENT + " TEXT,"
                 + COLUMN_HISTORY_TYPE + " TEXT,"
@@ -83,7 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<AssemblyForm> getAllAssembly() {
 
         List<AssemblyForm> assemblyFormList = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_ASSEMBLY;
+        String selectQuery = "SELECT  * FROM " + TABLE_ASSEMBLY+" WHERE "+COLUMN_ASSEMBLY_ACTIVE+" = 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -110,7 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<AssemblyForm> getByTypeAssembly(EnumType enumType) {
 
         List<AssemblyForm> assemblyFormList = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_ASSEMBLY+" WHERE "+COLUMN_ASSEMBLY_TYPE+" = '"+enumType.name()+"'";
+        String selectQuery = "SELECT  * FROM " + TABLE_ASSEMBLY+" WHERE "+COLUMN_ASSEMBLY_TYPE+" = '"+enumType.name()+"' AND "+COLUMN_ASSEMBLY_ACTIVE+" = 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -137,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public AssemblyForm getByIDTypeAssembly(EnumType enumType, String id) {
 
         AssemblyForm assemblyForm = null;
-        String selectQuery = "SELECT  * FROM " + TABLE_ASSEMBLY+" WHERE "+COLUMN_ASSEMBLY_TYPE+" = '"+enumType.name()+"' AND "+COLUMN_ASSEMBLY_ID+" = '"+id+"'";
+        String selectQuery = "SELECT  * FROM " + TABLE_ASSEMBLY+" WHERE "+COLUMN_ASSEMBLY_TYPE+" = '"+enumType.name()+"' AND "+COLUMN_ASSEMBLY_ID+" = '"+id+"' AND "+COLUMN_ASSEMBLY_ACTIVE+" = 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -225,12 +227,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 History history = new History();
-                history.setID(cursor.getString(0));
-                history.setTitle(cursor.getString(1));
-                history.setContent(cursor.getString(2));
-                history.setType(EnumType.valueOf(cursor.getString(3)));
-                history.setTypeInterrupt(cursor.getString(4));
-                history.setDate(new Date(cursor.getLong(5)));
+                history.setHistoryID(cursor.getString(0));
+                history.setID(cursor.getString(1));
+                history.setTitle(cursor.getString(2));
+                history.setContent(cursor.getString(3));
+                history.setType(EnumType.valueOf(cursor.getString(4)));
+                history.setTypeInterrupt(cursor.getString(5));
+                history.setDate(new Date(cursor.getLong(6)));
                 // Adding note to list
                 historyList.add(history);
             } while (cursor.moveToNext());
@@ -243,7 +246,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLUMN_HISTORY_ID, history.getID());
+        values.put(COLUMN_HISTORY_ID, history.getHistoryID());
+        values.put(COLUMN_HISTORY_ASSEMBLY_ID, history.getID());
         values.put(COLUMN_HISTORY_TITLE, history.getTitle());
         values.put(COLUMN_HISTORY_CONTENT, history.getContent());
         values.put(COLUMN_HISTORY_TYPE, history.getType().name());
@@ -259,6 +263,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(COLUMN_HISTORY_ASSEMBLY_ID, history.getID());
         values.put(COLUMN_HISTORY_TITLE, history.getTitle());
         values.put(COLUMN_HISTORY_CONTENT, history.getContent());
         values.put(COLUMN_HISTORY_TYPE, history.getType().name());
@@ -267,13 +272,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // updating row
         return db.update(TABLE_HISTORY, values, COLUMN_HISTORY_ID + " = ?",
-                new String[]{String.valueOf(history.getID())});
+                new String[]{String.valueOf(history.getHistoryID())});
     }
 
     public void deleteHistory(History history) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_HISTORY, COLUMN_HISTORY_ID + " = ?",
-                new String[] { String.valueOf(history.getID()) });
+                new String[] { String.valueOf(history.getHistoryID()) });
         db.close();
     }
 

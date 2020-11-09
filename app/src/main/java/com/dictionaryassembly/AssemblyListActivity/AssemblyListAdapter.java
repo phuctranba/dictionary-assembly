@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dictionaryassembly.Objects.AssemblyForm;
@@ -76,7 +77,11 @@ public class AssemblyListAdapter extends BaseAdapter {
                 viewHolder.textViewContent.setVisibility(View.GONE);
                 break;
             }
-            case INTERRUPT:
+            case INTERRUPT:{
+                viewHolder.textViewDescription.setText(assemblyForm.getTypeInterrupt());
+                viewHolder.textViewContent.setVisibility(View.GONE);
+                break;
+            }
             case MACRO:{
                 viewHolder.textViewDescription.setText(assemblyForm.getContent());
                 viewHolder.textViewContent.setVisibility(View.GONE);

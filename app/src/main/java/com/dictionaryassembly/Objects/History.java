@@ -11,15 +11,17 @@ import java.util.UUID;
 public class History extends AssemblyForm {
 
     private Date date;
+    private String HistoryID;
 
     public History(String ID, String title, String content, EnumType type, Boolean active) {
         super(ID, title, content, type);
         this.date = new Date();
     }
 
-    public History(AssemblyForm assemblyForm) {
+    public History(AssemblyForm assemblyForm, String HistoryID) {
         super(assemblyForm.getID(), assemblyForm.getTitle(), assemblyForm.getContent(), assemblyForm.getType(), assemblyForm.getTypeInterrupt());
         this.date = new Date();
+        this.HistoryID = HistoryID;
     }
 
     public History(String ID, String title, String content, EnumType type) {
@@ -55,4 +57,11 @@ public class History extends AssemblyForm {
         this.date = date;
     }
 
+    public String getHistoryID() {
+        return HistoryID;
+    }
+
+    public void setHistoryID(String historyID) {
+        HistoryID = historyID;
+    }
 }

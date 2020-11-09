@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +15,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dictionaryassembly.AssemblyDetailActivity.AssemblyDetailActivity;
-import com.dictionaryassembly.AssemblyEditActivity.AssemblyEditActivity;
-import com.dictionaryassembly.AssemblyListActivity.AssemblyListActivity;
 import com.dictionaryassembly.Objects.AssemblyForm;
 import com.dictionaryassembly.Objects.DatabaseHelper;
 import com.dictionaryassembly.Objects.EnumType;
@@ -27,7 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -69,6 +67,7 @@ public class SearchActivity extends AppCompatActivity {
         buttonMacro = findViewById(R.id.buttonMacro);
         searchView = findViewById(R.id.search_bar);
         listViewResult = findViewById(R.id.listResultSearch);
+        listViewResult.setEmptyView(findViewById(R.id.emptyElement));
         searchListAdapter = new SearchListAdapter(this, searchsListSearch);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -113,6 +112,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setType(EnumType.ALL);
+                setColorButton();
+                buttonAll.setBackgroundResource(R.drawable.item_options_selected);
+                buttonAll.setTextColor(getResources().getColor(R.color.white));
             }
         });
 
@@ -120,6 +122,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setType(EnumType.STATEMENT);
+                setColorButton();
+                buttonStatement.setBackgroundResource(R.drawable.item_options_selected);
+                buttonStatement.setTextColor(getResources().getColor(R.color.white));
             }
         });
 
@@ -127,6 +132,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setType(EnumType.STRUCT);
+                setColorButton();
+                buttonStruct.setBackgroundResource(R.drawable.item_options_selected);
+                buttonStruct.setTextColor(getResources().getColor(R.color.white));
             }
         });
 
@@ -134,6 +142,9 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setType(EnumType.INTERRUPT);
+                setColorButton();
+                buttonInterrupt.setBackgroundResource(R.drawable.item_options_selected);
+                buttonInterrupt.setTextColor(getResources().getColor(R.color.white));
             }
         });
 
@@ -141,18 +152,35 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setType(EnumType.MACRO);
+                setColorButton();
+                buttonMacro.setBackgroundResource(R.drawable.item_options_selected);
+                buttonMacro.setTextColor(getResources().getColor(R.color.white));
             }
         });
     }
 
+    private void setColorButton(){
+        buttonAll.setBackgroundResource(R.drawable.item_options);
+        buttonStatement.setBackgroundResource(R.drawable.item_options);
+        buttonStruct.setBackgroundResource(R.drawable.item_options);
+        buttonInterrupt.setBackgroundResource(R.drawable.item_options);
+        buttonMacro.setBackgroundResource(R.drawable.item_options);
+
+        buttonAll.setTextColor(getResources().getColor(R.color.colorPrimary));
+        buttonStatement.setTextColor(getResources().getColor(R.color.colorPrimary));
+        buttonStruct.setTextColor(getResources().getColor(R.color.colorPrimary));
+        buttonInterrupt.setTextColor(getResources().getColor(R.color.colorPrimary));
+        buttonMacro.setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
     private void saveHistory(AssemblyForm assemblyForm){
 
-        History history = new History(assemblyForm);
+        History history = new History(assemblyForm, UUID.randomUUID().toString());
 
-        FirebaseDatabase.getInstance().getReference("users")
+        FirebaseDatabase.getInstance().getReference("usersDictionary")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .child("history")
-                .child(UUID.randomUUID().toString())
+                .child(history.getHistoryID())
                 .setValue(history).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

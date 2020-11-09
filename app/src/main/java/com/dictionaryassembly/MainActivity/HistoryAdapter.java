@@ -14,6 +14,7 @@ import com.dictionaryassembly.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HistoryAdapter extends BaseAdapter {
@@ -23,6 +24,7 @@ public class HistoryAdapter extends BaseAdapter {
     private List<History> data;
 
     public HistoryAdapter(Context context, List<History> data) {
+        Collections.sort(data,History.sortDateDecrease);
         this.context = context;
         this.data = data;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

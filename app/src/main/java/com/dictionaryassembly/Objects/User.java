@@ -2,6 +2,7 @@ package com.dictionaryassembly.Objects;
 
 public class User {
     private String email, lastName, firstName, gender, age, typeEducation;
+    private int permission;
 
     public User(String email, String lastName, String firstName, String gender, String age, String typeEducation) {
         this.email = email;
@@ -10,12 +11,14 @@ public class User {
         this.gender = gender;
         this.age = age;
         this.typeEducation = typeEducation;
+        this.permission = 1;
     }
 
     public User(String email, String lastName, String firstName) {
         this.email = email;
         this.lastName = lastName;
         this.firstName = firstName;
+        this.permission = 1;
     }
 
     public User() {
@@ -68,5 +71,13 @@ public class User {
 
     public void setTypeEducation(String typeEducation) {
         this.typeEducation = typeEducation;
+    }
+
+    public int getPermission() {
+        return permission;
+    }
+
+    public void setPermission(int permission) {
+        this.permission = permission;
     }
 }

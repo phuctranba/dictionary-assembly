@@ -62,15 +62,13 @@ public class FragmentHistory extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("phuc", "Init: 2");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e("phuc", "Init: 1");
         Init(view);
 
         expandImage.setOnClickListener(new View.OnClickListener() {
@@ -84,12 +82,12 @@ public class FragmentHistory extends Fragment {
         listViewHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AssemblyForm assemblyForm = databaseHelper.getByIDTypeAssembly(historyList.get(i).getType(),historyList.get(i).getID());
-                if(assemblyForm!=null){
+                AssemblyForm assemblyForm = databaseHelper.getByIDTypeAssembly(historyList.get(i).getType(), historyList.get(i).getID());
+                if (assemblyForm != null) {
                     Intent intent = new Intent(getActivity(), AssemblyDetailActivity.class);
                     intent.putExtra("ITEM", assemblyForm);
                     startActivity(intent);
-                }else {
+                } else {
                     Toast.makeText(getActivity(), "Nội dung không còn tồn tại!!", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -98,6 +96,7 @@ public class FragmentHistory extends Fragment {
 
     private void Init(View view) {
         listViewHistory = view.findViewById(R.id.listviewHistory);
+        listViewHistory.setEmptyView(view.findViewById(R.id.emptyElement));
         expandImage = view.findViewById(R.id.imageExpand);
 
         databaseHelper = new DatabaseHelper(getActivity());
@@ -108,15 +107,16 @@ public class FragmentHistory extends Fragment {
         listViewHistory.setAdapter(historyAdapter);
     }
 
-    private void loadHistory(){
+    private void loadHistory() {
 
         ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (cm.getActiveNetworkInfo() != null &&
                 cm.getActiveNetworkInfo().isConnectedOrConnecting()) {
-            historyAdapter = new HistoryAdapter(getActivity(),historyList);
+            historyAdapter = new HistoryAdapter(getActivity(), historyList);
+            databaseHelper.deleteAllHistory();
 
-            FirebaseDatabase.getInstance().getReference("users")
+            FirebaseDatabase.getInstance().getReference("usersDictionary")
                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                     .child("history")
                     .addChildEventListener(new ChildEventListener() {
@@ -151,9 +151,9 @@ public class FragmentHistory extends Fragment {
 
                         }
                     });
-        }else {
+        } else {
             historyList = new ArrayList<>(databaseHelper.getAllHistory());
-            historyAdapter = new HistoryAdapter(getActivity(),historyList);
+            historyAdapter = new HistoryAdapter(getActivity(), historyList);
         }
     }
 

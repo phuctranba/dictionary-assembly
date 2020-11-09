@@ -153,6 +153,7 @@ public class SignUpFragment extends Fragment {
             }
         }
 
+        ((LoginActivity) getActivity()).showLoad("Đang đăng ký...");
 
         mauth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -168,15 +169,20 @@ public class SignUpFragment extends Fragment {
                             if (task.isSuccessful()) {
 
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("email", user.getEmail());
-                                editor.putString("lastname", user.getLastName());
-                                editor.putString("firstname", user.getFirstName());
+                                if(user.getEmail()!=null) editor.putString("email", user.getEmail());
+                                if(user.getLastName()!=null) editor.putString("lastname", user.getLastName());
+                                if(user.getFirstName()!=null) editor.putString("firstname", user.getFirstName());
+                                if(user.getAge()!=null) editor.putString("age", user.getAge());
+                                if(user.getTypeEducation()!=null) editor.putString("typeEducation", user.getTypeEducation());
+                                if(user.getGender()!=null) editor.putString("gender", user.getGender());
+                                editor.putInt("permission", user.getPermission());
 
                                 editor.apply();
 
                                 Toast.makeText(getActivity(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                                 ((LoginActivity) getActivity()).GoToMainActitity();
                             } else {
+                                ((LoginActivity) getActivity()).hideLoad();
                                 Toast.makeText(getActivity(), "Đăng ký thất bại, thử lại!", Toast.LENGTH_SHORT).show();
                             }
                         }

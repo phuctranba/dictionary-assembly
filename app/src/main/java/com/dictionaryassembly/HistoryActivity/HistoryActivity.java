@@ -40,14 +40,14 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         Init();
-        imageViewSortDate.setVisibility(View.GONE);
-        Collections.sort(historyArrayList,History.sortTitleDecrease);
+        imageViewSortTitle.setVisibility(View.GONE);
+        Collections.sort(historyArrayList,History.sortDateIncrease);
         listViewHistory.setAdapter(historyAdapter);
 
         buttonSortDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Collections.sort(historyArrayList, sortDate?History.sortDateIncrease:History.sortDateDecrease);
+                Collections.sort(historyArrayList, sortDate?History.sortDateDecrease:History.sortDateIncrease);
                 imageViewSortDate.setImageResource(sortDate?R.drawable.icon_arrow_up:R.drawable.icon_arrow_down);
                 sortDate = !sortDate;
                 imageViewSortTitle.setVisibility(View.GONE);
@@ -96,7 +96,7 @@ public class HistoryActivity extends AppCompatActivity {
         imageViewSortDate = findViewById(R.id.imageViewSortDate);
         imageViewSortTitle = findViewById(R.id.imageViewSortTitle);
         listViewHistory = findViewById(R.id.listHistory);
-        listViewHistory = findViewById(R.id.listHistory);
+        listViewHistory.setEmptyView(findViewById(R.id.emptyElement));
         historyAdapter = new HistoryActivityAdapter(this, historyArrayList);
     }
 }

@@ -162,6 +162,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hoạt động"
+                android:checked="true"
                 android:textColor="@color/colorPrimary"
                 android:buttonTint="@color/colorPrimary"
                 android:layout_marginHorizontal="20dp"

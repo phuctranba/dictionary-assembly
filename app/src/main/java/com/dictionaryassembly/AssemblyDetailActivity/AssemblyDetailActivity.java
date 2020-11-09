@@ -3,14 +3,20 @@ package com.dictionaryassembly.AssemblyDetailActivity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Dialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dictionaryassembly.Objects.AssemblyForm;
 import com.dictionaryassembly.R;
+import com.ortiz.touchview.TouchImageView;
 import com.squareup.picasso.Picasso;
 
 public class AssemblyDetailActivity extends AppCompatActivity {
@@ -29,6 +35,26 @@ public class AssemblyDetailActivity extends AppCompatActivity {
 
         loadContent();
 
+        imageSample.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog=new Dialog(AssemblyDetailActivity.this,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                dialog.setContentView(R.layout.layout_full_image);
+                TouchImageView bmImage = (TouchImageView) dialog.findViewById(R.id.img_receipt);
+                Picasso.get().load(assemblyForm.getImageLink()).into(bmImage);
+                Button button=(Button)dialog.findViewById(R.id.btn_dissmiss);
+                dialog.setCancelable(true);
+                dialog.show();
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
 
     }
 

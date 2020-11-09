@@ -42,12 +42,12 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="0.2"
-            android:background="@drawable/item_options"
+            android:background="@drawable/item_options_selected"
             android:text="Tất cả"
             android:textAllCaps="false"
             android:paddingBottom="5dp"
             android:paddingRight="3dp"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/white"
             android:textSize="14sp" />
 
         <Button
@@ -112,5 +112,13 @@
         android:id="@+id/listResultSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/emptyElement"
+        android:layout_marginTop="200dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:src="@drawable/icon_empty" />
 
 </LinearLayout>
