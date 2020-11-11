@@ -82,6 +82,7 @@ public class UserActivity extends AppCompatActivity {
         String gender = sharedPreferences.getString("gender", "Trống");
         String age = sharedPreferences.getString("age", "Trống");
         String typeEducation = sharedPreferences.getString("typeEducation", "Trống");
+        int permission = sharedPreferences.getInt("permission", 1);
 
         user.setEmail(email);
         user.setLastName(lastname);
@@ -89,6 +90,7 @@ public class UserActivity extends AppCompatActivity {
         user.setGender(gender);
         user.setAge(age);
         user.setTypeEducation(typeEducation);
+        user.setPermission(permission);
 
         textViewName.setText((lastname+firstname).length()==0?"Trống":lastname+" "+firstname);
         textViewEmail.setText(email);
