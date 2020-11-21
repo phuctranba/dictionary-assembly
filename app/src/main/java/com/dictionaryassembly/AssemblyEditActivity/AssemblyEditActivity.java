@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.dictionaryassembly.LoginActivity.LoginActivity;
 import com.dictionaryassembly.Objects.AssemblyForm;
+import com.dictionaryassembly.Objects.DatabaseHelper;
 import com.dictionaryassembly.Objects.EnumType;
 import com.dictionaryassembly.Objects.User;
 import com.dictionaryassembly.R;
@@ -44,6 +45,8 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AssemblyEditActivity extends AppCompatActivity {
 
@@ -54,7 +57,9 @@ public class AssemblyEditActivity extends AppCompatActivity {
     CheckBox checkBoxActive;
     LinearLayout linearLayoutInterrupt;
     RadioButton radioButtonBIOS, radioButtonDOS;
+    String oldTitle = "";
 
+    DatabaseHelper databaseHelper;
     FirebaseStorage storage;
     StorageReference storageReference;
     ProgressDialog progressDialog;
@@ -94,6 +99,7 @@ public class AssemblyEditActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         progressDialog = new ProgressDialog(this);
+        databaseHelper = new DatabaseHelper(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -114,28 +120,30 @@ public class AssemblyEditActivity extends AppCompatActivity {
             setTitle("Chỉnh sửa");
             assemblyForm = (AssemblyForm) getIntent().getSerializableExtra("ITEM");
             typeAssembly = assemblyForm.getType();
+            oldTitle = assemblyForm.getTitle();
 
             editTextDescription.setText(assemblyForm.getDescription());
             checkBoxActive.setChecked(assemblyForm.isActive());
             editTextContent.setText(assemblyForm.getContent());
 
-            if(typeAssembly.equals(EnumType.INTERRUPT)){
+            if (typeAssembly.equals(EnumType.INTERRUPT)) {
                 String[] title = assemblyForm.getTitle().split("-");
                 editTextNgatInterrupt.setText(title[0].trim());
                 editTextHamInterrupt.setText(title[1].trim());
 
                 String[] content = assemblyForm.getTypeInterrupt().split("-");
-                if(!content[0].trim().equals("Ngắt BIOS"))  {
+                if (!content[0].trim().equals("Ngắt BIOS")) {
                     radioButtonDOS.setChecked(true);
                     radioButtonBIOS.setChecked(false);
                 }
                 editTextTypeInterrupt.setText(content[1].trim());
-            }else {
+            } else {
                 editTextTitle.setText(assemblyForm.getTitle());
             }
 
-            if(assemblyForm.getImageLink()!=null)
-                if(!assemblyForm.getImageLink().isEmpty())Picasso.get().load(assemblyForm.getImageLink()).into(imageView);
+            if (assemblyForm.getImageLink() != null)
+                if (!assemblyForm.getImageLink().isEmpty())
+                    Picasso.get().load(assemblyForm.getImageLink()).into(imageView);
         }
     }
 
@@ -153,9 +161,9 @@ public class AssemblyEditActivity extends AppCompatActivity {
                 ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
                 if (cm.getActiveNetworkInfo() != null &&
-                        cm.getActiveNetworkInfo().isConnectedOrConnecting()){
+                        cm.getActiveNetworkInfo().isConnectedOrConnecting()) {
                     uploadImage();
-                }else {
+                } else {
                     Toast.makeText(AssemblyEditActivity.this, "Không có kết nối internet, thử lại sau!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -230,15 +238,31 @@ public class AssemblyEditActivity extends AppCompatActivity {
             assemblyForm.setTitle(editTextTitle.getText().toString().trim());
         }
 
+        //Format title
+        String regex = "\\s+";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(assemblyForm.getTitle());
+        String resultTitle = matcher.replaceAll(" ");
+
+        assemblyForm.setTitle(resultTitle);
+
         assemblyForm.setContent(editTextContent.getText().toString().trim());
         assemblyForm.setDescription(editTextDescription.getText().toString().trim());
         assemblyForm.setActive(checkBoxActive.isChecked());
         if (updateImage) assemblyForm.setImageLink(urlImage);
 
-        if(assemblyForm.getTitle().isEmpty()||assemblyForm.getDescription().isEmpty()){
+        if (assemblyForm.getTitle().isEmpty() || assemblyForm.getDescription().isEmpty()) {
             Toast.makeText(AssemblyEditActivity.this, "Vui lòng nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (!oldTitle.toUpperCase().equals(assemblyForm.getTitle().toUpperCase())) {
+            if (databaseHelper.checkAssembly(assemblyForm.getTitle().toUpperCase(), assemblyForm.getType())) {
+                Toast.makeText(AssemblyEditActivity.this, "Tên này đã tồn tại!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
 
         if (typeAssembly.equals(EnumType.MACRO)) {
             FirebaseDatabase.getInstance().getReference("usersDictionary")

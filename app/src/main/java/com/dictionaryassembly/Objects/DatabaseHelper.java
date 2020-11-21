@@ -213,6 +213,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_ASSEMBLY +" WHERE "+COLUMN_ASSEMBLY_TYPE+" = '"+EnumType.MACRO.name()+"'");
     }
 
+    public boolean checkAssembly(String title, EnumType enumType){
+        String selectQuery = "SELECT  * FROM " + TABLE_ASSEMBLY+" WHERE UPPER("+COLUMN_ASSEMBLY_TITLE+") = '"+title+"' AND "+COLUMN_ASSEMBLY_TYPE+" = '"+enumType.name()+"' AND "+COLUMN_ASSEMBLY_ACTIVE+" = 1";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        return cursor.moveToFirst();
+    }
+
 //
 //    Thao tác với bảng History
 //
