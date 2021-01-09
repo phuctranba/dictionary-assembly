@@ -1,4 +1,4 @@
-# DictionaryAssembly
+# Dictionary Assembly
 
 Dictionary Android App using Firebase
 
