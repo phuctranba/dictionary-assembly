@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "941849488373",
-    "firebase_url": "https://dictionary-assembly-3f95f.firebaseio.com",
-    "project_id": "dictionary-assembly-3f95f",
-    "storage_bucket": "dictionary-assembly-3f95f.appspot.com"
+    "project_number": "600030376187",
+    "project_id": "dictionary-assembly-200799",
+    "storage_bucket": "dictionary-assembly-200799.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:941849488373:android:e4f264a70e222590ac4ebc",
+        "mobilesdk_app_id": "1:600030376187:android:a98fd34c7994c4caac805e",
         "android_client_info": {
-          "package_name": "com.dictionaryassembly"
+          "package_name": "com.github.phuctranba.dictionaryassembly"
         }
       },
       "oauth_client": [
         {
-          "client_id": "941849488373-t5ntqdd98jadcos64clvhkd2317p8eh5.apps.googleusercontent.com",
+          "client_id": "600030376187-04jneg4i5a64digkmb0nopibdtiaua2a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC22u22GbDQcyPyMVqzwNDg8THrGLr-3hg"
+          "current_key": "AIzaSyA9VhVigHY5v64saPeBR9bfaWx9RCDYO5o"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "941849488373-t5ntqdd98jadcos64clvhkd2317p8eh5.apps.googleusercontent.com",
+              "client_id": "600030376187-04jneg4i5a64digkmb0nopibdtiaua2a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Dictionary_Assembly.iml" filepath="$PROJECT_DIR$/.idea/modules/Dictionary_Assembly.iml" group="Dictionary_Assembly" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="Dictionary Assembly/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Dictionary_Assembly.iml" filepath="$PROJECT_DIR$/.idea/modules/Dictionary_Assembly.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Dictionary_Assembly.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Dictionary_Assembly.app.iml" />
     </modules>
   </component>
 </project>

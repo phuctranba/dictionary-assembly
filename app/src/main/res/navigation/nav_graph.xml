@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.dictionaryassembly.MainActivity.FragmentOptions"
+        android:name="com.github.phuctranba.dictionaryassembly.MainActivity.FragmentOptions"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_options">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.dictionaryassembly.MainActivity.FragmentHistory"
+        android:name="com.github.phuctranba.dictionaryassembly.MainActivity.FragmentHistory"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_history">
 

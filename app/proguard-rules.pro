@@ -21,6 +21,6 @@
 #-renamesourcefileattribute SourceFile
 
 -keepattributes Signature
--keepclassmembers class com.dictionaryassembly.** {
+-keepclassmembers class com.github.phuctranba.dictionaryassembly.** {
       *;
     }

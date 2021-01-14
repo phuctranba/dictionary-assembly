@@ -6,7 +6,7 @@ android {
     buildToolsVersion "30.0.0"
 
     defaultConfig {
-        applicationId "com.dictionaryassembly"
+        applicationId "com.github.phuctranba.dictionaryassembly"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
